@@ -42,10 +42,12 @@ public class BankAccount {
         }
     }
     // This withdrawals from the balance 
-    public void withdrawal(double amount) {
-        if (amount > 0) {
+    public boolean withdrawal(double amount) {
+        if (amount > 0 && this.balance >= amount) {
             this.balance -= amount;
+            return true;
         }
+        return false;
     }
     // Displays account info
     protected void accountSummary() {

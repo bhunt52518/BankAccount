@@ -28,20 +28,22 @@ public class CheckingAccount extends BankAccount {
     public void setOverdraftFee(int overdraftFee) {
         this.overdraftFee = overdraftFee;
     }
-    public void processWithdrawal(double amount) {
-        // Check if withdrawal will lead to an overdraft
-        if (this.balance - amount < 0) {
-            System.out.println("Warning: Insufficient funds. Applying $" + overdraftFee + " overdraft fee.");
-            super.withdrawal(amount); 
-            this.balance -= overdraftFee;
+    public boolean processWithdrawal(double amount) {
+        if (amount <= 0) {
+            return false; 
+        }
+        if (amount <= balance) {
+            this.balance -= amount;
+            return true;
         } else {
-            super.withdrawal(amount);
+            this.balance = balance - (amount + overdraftFee);
+            return true; 
         }
     }
-    // Overrides the withdrawal method to use the processWithdrawal logic
     @Override
-    public void withdrawal(double amount) {
+    public boolean withdrawal(double amount) {
         processWithdrawal(amount);
+        return processWithdrawal(amount);
     }
 
     // Method to display all account details
